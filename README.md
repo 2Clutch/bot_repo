@@ -1,5 +1,5 @@
 # bot_repo
-* # Home Depot &lt;code_athlon/>  - Orange Bot Prompt # *
+# Home Depot &lt;code_athlon/>  - Orange Bot Prompt # 
 
 Create a twitter bot that monitors the platform for negative Home Depot experiences. When the bot discovers a negative tweet it then propmpts an associate to direct message the customer and attempt to resolve the issue. The propmpt should include the twitter users profile information and the tweet that triggered the bot.
 
