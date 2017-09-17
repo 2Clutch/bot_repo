@@ -35,7 +35,12 @@ class MyStreamListener(tweepy.StreamListener):
             2: "I bought some shoes from a drug dealer. I don't know what he laced them with, but I've been tripping all day.",
             3: "I told my girlfriend she drew her eyebrows too high. She seemed surprised.",
             4: "I bought my friend an elephant for his room.\nHe said \"Thanks\"\nI said \"Don't mention it\"",
-            5: "Why did the old man fall in the well?\nBecause he couldn't see that well."
+            5: "Why did the old man fall in the well?\nBecause he couldn't see that well.",
+            6: "I bought the world's worst thesaurus yesterday. Not only is it terrible, it's terrible.",
+            7: "This is my step ladder. I never knew my real ladder.",
+            8: "My friend asked me to help him round up his 37 sheep. \nI said \"40\"",
+            9: "I've found a job helping a one armed typist do capital letters. It's shift work.",
+            10: "Communism jokes aren't funny unless everyone gets them."
         }
 
     def on_status(self, status):
@@ -110,7 +115,7 @@ class MyStreamListener(tweepy.StreamListener):
                     except:
                         currentRadius *= 2
 
-                string = "Hello @{0}.\nThe nearest @HomeDepot to you is {1}. Rated {2}/5.".format(screenName, vicinity, rating)
+                string = "Hello @{0}. The nearest @HomeDepot to you is {1}. Rated {2}/5.".format(screenName, vicinity, rating)
                 nullArg = tweepy.API(auth).update_status(status=string, in_reply_to_status_id=dict_data["id"])
 
                 printTweet()
@@ -139,7 +144,7 @@ class MyStreamListener(tweepy.StreamListener):
                         elif word in self.dict_commands["joke"]:
                             print("Joke Reply")
                             joke = self.jokes[random.randint(1, len(self.jokes))]
-                            string = "Hey @{0}. {1}".format(dict_data["user"]["screen_name"], joke)
+                            string = "Hey @{0}. \n{1}".format(dict_data["user"]["screen_name"], joke)
                             replyTweet(string, dict_data["id"])
                             printTweet()
                             return None
