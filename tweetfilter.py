@@ -26,18 +26,25 @@ class MyStreamListener(tweepy.StreamListener):
             # pass tweet into TextBlob
             tweet = textblob.TextBlob(dict_data["text"])
 
+            sentiment = ""
             # determine if sentiment is positive, negative, or neutral
             if tweet.sentiment.polarity < 0:
+                # negative
                 sentiment = "negative"
+                string = "Hello @{}, please follow this link, https://goo.gl/H5khzW, and let us know about your recent experience.".format(dict_data["user"]["screen_name"])
+                # a = tweepy.API(auth).send_direct_message(user=dict_data["user"]["screen_name"], text=string)
+                a = tweepy.API(auth).update_status(status=string, in_reply_to_status_id=dict_data["id"])
+
             elif tweet.sentiment.polarity > 0:
+                # positive
                 sentiment = "positive"
 
-            # print("User: {}".format(dict_data["user"]["screen_name"]))
-            # print("Tweet: {}".format(dict_data["text"]))
-            # print("Count: {}".format(MyStreamListener.count))
-            # print("Sentiment: {}".format(sentiment))
-            # print("Score: {}".format(tweet.sentiment.polarity))
-            # print("")
+            print("User: {}".format(dict_data["user"]["screen_name"]))
+            print("Tweet: {}".format(dict_data["text"]))
+            print("Count: {}".format(MyStreamListener.count))
+            print("Sentiment: {}".format(sentiment))
+            print("Score: {}".format(tweet.sentiment.polarity))
+            print("")
 
             MyStreamListener.count += 1
 
@@ -49,6 +56,7 @@ class MyStreamListener(tweepy.StreamListener):
 
 def main():
     # set twitter keys/tokens
+    global auth
     auth = tweepy.OAuthHandler(config.consumer_key, config.consumer_secret)
     auth.set_access_token(config.access_token, config.access_token_secret)
 
@@ -57,7 +65,7 @@ def main():
     # set stream details
     myStream = tweepy.Stream(auth=auth, listener=myStreamListener)
     try:
-        myStream.filter(track=["home depot", "homedepot"], async=True, languages=["en"])
+        myStream.filter(track=["homedepot", "home depot"], async=True, languages=["en"])
 
     except Exception as error:
         print("Error: {}".format(error.__doc__))
