@@ -47,12 +47,14 @@ class MyStreamListener(tweepy.StreamListener):
         print(status.text)
 
     def on_data(self, data):
-        MyStreamListener.__init__(self)
         dict_data = json.loads(data)
         MyStreamListener.count += 1
 
         # filter out RTs
         if "RT @" not in dict_data["text"] and dict_data["user"]["screen_name"] != tweepy.API(auth).me()._json["screen_name"]:
+
+            def replyTweet(string, replyTo):
+                tweepy.API(auth).update_status(status=string, in_reply_to_status_id=replyTo)
 
             def feedback(tweet):
                 # def google sentiment analytics
@@ -63,9 +65,7 @@ class MyStreamListener(tweepy.StreamListener):
                         text = text.decode('utf-8')
 
                     # Instantiates a plain text document.
-                    document = types.Document(
-                        content=text,
-                        type=enums.Document.Type.PLAIN_TEXT)
+                    document = types.Document(content=text, type=enums.Document.Type.PLAIN_TEXT)
 
                     # Detects sentiment in the document.
                     sentiment = client.analyze_sentiment(document).document_sentiment
@@ -90,12 +90,11 @@ class MyStreamListener(tweepy.StreamListener):
                 if len(screenName) > charLeft:
                     screenName = screenName[:charLeft - 1]
                 string = "Hello @{0}. We're {1}. Let us know about your recent experience: https://goo.gl/H5khzW".format(screenName, middleStr)
-                nullArg = tweepy.API(auth).update_status(status=string, in_reply_to_status_id=dict_data["id"])
+                replyTweet(string, dict_data["id"])
 
                 printTweet()
                 print("Sentiment: {}".format(sentiment_type))
                 print("Score: {}".format(sentiment))
-                print("")
 
             def locate(location):
                 client = googlemaps.Client(key="AIzaSyAts9uxjLmeWbS0nfPskZC9Ou8YlMBe4Ow")
@@ -116,52 +115,52 @@ class MyStreamListener(tweepy.StreamListener):
                         currentRadius *= 2
 
                 string = "Hello @{0}. The nearest @HomeDepot to you is {1}. Rated {2}/5.".format(screenName, vicinity, rating)
-                nullArg = tweepy.API(auth).update_status(status=string, in_reply_to_status_id=dict_data["id"])
+                replyTweet(string, dict_data["id"])
 
                 printTweet()
                 print(name)
                 print(vicinity)
                 print(rating)
 
-            def replyTweet(string, replyTo):
-                nullArg = tweepy.API(auth).update_status(status=string, in_reply_to_status_id=replyTo)
-
             def printTweet():
                 print("User: {}".format(dict_data["user"]["screen_name"]))
                 print("Tweet: {}".format(dict_data["text"]))
                 print("Count: {}".format(MyStreamListener.count))
 
-            tweet = dict_data["text"]
-            for word in tweet.lower().split(" "):
-                for keyList in self.dict_commands.values():
-                    for punc in ".,;:?!'\"-":
-                        word = word.strip(punc)
-                    if word in keyList:
-                        if word in self.dict_commands["locate"] and dict_data["place"]:
-                            print("Location Reply")
-                            locate(dict_data["place"]["bounding_box"]["coordinates"][0][0])
-                            return None
-                        elif word in self.dict_commands["joke"]:
-                            print("Joke Reply")
-                            joke = self.jokes[random.randint(1, len(self.jokes))]
-                            string = "Hey @{0}. \n{1}".format(dict_data["user"]["screen_name"], joke)
-                            replyTweet(string, dict_data["id"])
-                            printTweet()
-                            return None
-                        elif word in self.dict_commands["promotion"]:
-                            print("Promotion Reply")
-                            string = "Hi @{}! You can find us on FB: HomeDepot, @HomeDepot, INSTA: @HomeDepot, and YT: https://goo.gl/U8gRCp.".format(dict_data["user"]["screen_name"])
-                            replyTweet(string, dict_data["id"])
-                            printTweet()
-                            return None
-                        elif word in self.dict_commands["hours"]:
-                            print("Hours Reply")
-                            string = "Hola @{}. Our hours are Mon-Sat: 6:00am - 10:00pm and on Sun: 8:00am - 8:00pm.".format(dict_data["user"]["screen_name"])
-                            replyTweet(string, dict_data["id"])
-                            printTweet()
-                            return None
-            print("Feedback Reply")
-            feedback(dict_data["text"])
+            def logic():
+                tweet = dict_data["text"]
+                for word in tweet.lower().split(" "):
+                    for keyList in self.dict_commands.values():
+                        for punc in ".,;:?!'\"-":
+                            word = word.strip(punc)
+                        if word in keyList:
+                            if word in self.dict_commands["locate"] and dict_data["place"]:
+                                print("Location Reply")
+                                locate(dict_data["place"]["bounding_box"]["coordinates"][0][0])
+                                return None
+                            elif word in self.dict_commands["joke"]:
+                                print("Joke Reply")
+                                joke = self.jokes[random.randint(1, len(self.jokes))]
+                                string = "Hey @{0}. \n{1}".format(dict_data["user"]["screen_name"], joke)
+                                replyTweet(string, dict_data["id"])
+                                printTweet()
+                                return None
+                            elif word in self.dict_commands["promotion"]:
+                                print("Promotion Reply")
+                                string = "Hi @{}! You can find us on FB: HomeDepot, @HomeDepot, INSTA: @HomeDepot, and YT: https://goo.gl/U8gRCp.".format(dict_data["user"]["screen_name"])
+                                replyTweet(string, dict_data["id"])
+                                printTweet()
+                                return None
+                            elif word in self.dict_commands["hours"]:
+                                print("Hours Reply")
+                                string = "Hola @{}. Our hours are Mon-Sat: 6:00am - 10:00pm and on Sun: 8:00am - 8:00pm.".format(dict_data["user"]["screen_name"])
+                                replyTweet(string, dict_data["id"])
+                                printTweet()
+                                return None
+                print("Feedback Reply")
+                feedback(tweet)
+
+            logic()
 
     # error handling
     def on_error(self, status_code):
@@ -180,7 +179,7 @@ class MyStreamListener(tweepy.StreamListener):
             if timeDelay:
                 print("Error Code: {}".format(status_code))
                 print("Time: {}".format(timeDelay))
-                return time.sleep(timeDelay + (timeDelay * .05))
+                return time.sleep(timeDelay + (timeDelay * .1))
 
 
 def main():
@@ -195,9 +194,6 @@ def main():
     # set stream details
     myStream = tweepy.Stream(auth=auth, listener=myStreamListener)
 
-    # print(tweepy.API(auth).rate_limit_status())
-    # print("\n")
-    # print(tweepy.API(auth).rate_limit_status()['resources']['users']['/users/lookup'])
     try:
         myStream.filter(track=["homedepot", "home depot", "homedepotassist", "home depot's"], async=True, languages=["en"])
     except tweepy.TweepError:
