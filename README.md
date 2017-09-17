@@ -14,6 +14,6 @@ Create a twitter bot that monitors the platform for negative Home Depot experien
 
 ## RESOURCES:
 
-	Twitter API: https://dev.twitter.com/ads/tutorials/getting-started
+Twitter API: https://dev.twitter.com/ads/tutorials/getting-started
 
-	Botwiki: https://botwiki.org/tutorials/twitterbots/
+Botwiki: https://botwiki.org/tutorials/twitterbots/
