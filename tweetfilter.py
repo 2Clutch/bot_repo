@@ -7,7 +7,7 @@ import config
 
 class MyStreamListener(tweepy.StreamListener):
     count = 0
-    limit = 10
+    # limit = 10
 
     def on_status(self, status):
         print(status.text)
@@ -57,7 +57,7 @@ def main():
     # set stream details
     myStream = tweepy.Stream(auth=auth, listener=myStreamListener)
     try:
-        myStream.filter(track=["home depot", "homedepot", "trump"], async=True, languages=["en"])
+        myStream.filter(track=["home depot", "homedepot"], async=True, languages=["en"])
 
     except Exception as error:
         print("Error: {}".format(error.__doc__))
