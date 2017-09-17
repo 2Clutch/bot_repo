@@ -31,7 +31,7 @@ class MyStreamListener(tweepy.StreamListener):
             if tweet.sentiment.polarity < 0:
                 # negative
                 sentiment = "negative"
-                string = "Hello @{}, we're your visit didn't go as planned. Please follow this link, https://goo.gl/H5khzW, and let us know about your recent experience.".format(dict_data["user"]["screen_name"])
+                string = "Hello @{}, we're sorry your visit didn't go as planned. Please follow this link, https://goo.gl/H5khzW, and let us know about your recent experience.".format(dict_data["user"]["screen_name"])
                 # a = tweepy.API(auth).send_direct_message(user=dict_data["user"]["screen_name"], text=string)
                 a = tweepy.API(auth).update_status(status=string, in_reply_to_status_id=dict_data["id"])
 
