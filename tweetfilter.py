@@ -59,7 +59,7 @@ def main():
     myStream = tweepy.Stream(auth=auth, listener=myStreamListener)
 
     try:
-        myStream.filter(track=["home depot", "homedepot", "trump"], async=False)
+        myStream.filter(track=["home depot", "homedepot"], async=False)
 
     except Exception as error:
         print("Error: {}".format(error.__doc__))
