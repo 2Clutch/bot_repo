@@ -11,6 +11,9 @@ Create a twitter bot that monitors the platform for negative Home Depot experien
 
 ## THEN: 
 	The bot will apply sentiment analysis to the post. If the sentiment is negative then the bot will atttempt to connect the customer with an associate to resolve the issue. If the sentiment is positive then the bot will invite the customer to leave a review of their experience.
+	
+## OTHER FEATURES:
+	The bot can also help users find the nearest location, shop hours, relevant social media links, and tell jokes.
 
 ## RESOURCES
 
