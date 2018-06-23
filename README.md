@@ -1,5 +1,8 @@
 # bot_repo
-# Home Depot &lt;code_athlon/>  - Orange Bot Prompt # 
+# Home Depot &lt;code_athlon/>  - Orange Bot Prompt #
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/97ed5d50454440f5bece965619da9301)](https://app.codacy.com/app/2Clutch/bot_repo?utm_source=github.com&utm_medium=referral&utm_content=2Clutch/bot_repo&utm_campaign=badger)
+[![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/2Clutch/knowledge-purse)
 
 Create a twitter bot that monitors the platform for negative Home Depot experiences. When the bot discovers a negative tweet it then propmpts an associate to direct message the customer and attempt to resolve the issue. The propmpt should include the twitter users profile information and the tweet that triggered the bot.
 
